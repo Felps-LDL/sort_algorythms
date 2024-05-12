@@ -1,7 +1,5 @@
 #include <bits/stdc++.h>
 #include <chrono>
-#define INF 0x3f3f3f3f
-#define LINF 0x3f3f3f3f3f3f3f3fll
 
 using namespace std;
 using namespace std::chrono;
