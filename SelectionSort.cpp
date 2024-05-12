@@ -1,17 +1,8 @@
 #include <bits/stdc++.h>
-#define optimize ios::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
-#define endl '\n'
-#define f first
-#define s second
-#define dbg(x) cout << "x = " << x << endl;
-#define ll long long
-#define pii pair<int, int> 
-#define piii pair<pair<int,int>, int>
-#define ALL(x) x.begin(), x.end()
-#define INF 0x3f3f3f3f
-#define LINF 0x3f3f3f3f3f3f3f3fll
+#include <chrono>
 
 using namespace std;
+using namespace std::chrono;
 
 void swap(int v[], int i, int j)
 {
@@ -42,15 +33,21 @@ void SelectionSort (int v[], int tam)
 
 int main()
 {
-    optimize;
+    int n;
+    cin >> n;
 
-    int valores[6];
-    for (int i = 0; i < 6; i++) cin >> valores[i];
+    int valores[n];
+    for (int i = 0; i < n; i++) cin >> valores[i];
 
-    SelectionSort(valores, 6);
+    auto start = steady_clock::now();
+    SelectionSort(valores, n);
+    auto end = steady_clock::now();
 
-    for (int i = 0; i < 6; i++) cout << valores[i] << " ";
+    for (int i = 0; i < n; i++) cout << valores[i] << " ";
     cout << endl;
+
+    auto elapsed = end - start;
+    cout << duration_cast<nanoseconds>(elapsed).count() / 1000000.0 << "ms\n";
 
     return 0;
 }
