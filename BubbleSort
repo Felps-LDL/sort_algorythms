@@ -1,17 +1,10 @@
 #include <bits/stdc++.h>
-#define optimize ios::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
-#define endl '\n'
-#define f first
-#define s second
-#define dbg(x) cout << "x = " << x << endl;
-#define ll long long
-#define pii pair<int, int> 
-#define piii pair<pair<int,int>, int>
-#define ALL(x) x.begin(), x.end()
+#include <chrono>
 #define INF 0x3f3f3f3f
 #define LINF 0x3f3f3f3f3f3f3f3fll
 
 using namespace std;
+using namespace std::chrono;
 
 void swap(int v[], int i, int j)
 {
@@ -24,24 +17,37 @@ void BubbleSort(int v[], int tam)
 {
     for (int i = tam - 1; i >= 1; i--)
     {
+        int troca = 0;
         for (int j = 0; j < i; j++)
         {
-            if (v[j] > v[j + 1]) swap(v, j, j + 1);
+            if (v[j] > v[j + 1]) 
+            {
+              swap(v, j, j + 1);
+              troca = 1;
+            }
         }
+
+        if (troca == 0) return;
     }
 }
 
 int main()
 {
-    optimize;
+    int n;
+    cin >> n;
 
-    int valores[6];
-    for (int i = 0; i < 6; i++) cin >> valores[i];
+    int valores[n];
+    for (int i = 0; i < n; i++) cin >> valores[i];
 
-    BubbleSort(valores, 6);
-
-    for (int i = 0; i < 6; i++) cout << valores[i] << " ";
+    auto start = steady_clock::now();
+    BubbleSort(valores, n);
+    auto end = steady_clock::now();
+  
+    for (int i = 0; i < n; i++) cout << valores[i] << " ";
     cout << endl;
+
+    auto elapsed = end - start;
+    cout << duration_cast<nanoseconds>(elapsed).count() / 1000000.0 << "ms\n";
 
     return 0;
 }
