@@ -128,15 +128,15 @@ int main()
     cin >> n; 
     int valores[n];
 
-    auto selectiontime = steady_clock::duration::zero();
-    auto insertiontime = steady_clock::duration::zero();
-    auto bubbletime = steady_clock::duration::zero();
-    auto mergetime = steady_clock::duration::zero();
+    auto selectiontime = 0;
+    auto insertiontime = 0;
+    auto bubbletime = 0;
+    auto mergetime = 0;
 
-    vector<std::chrono::duration<long long, std::nano>> selectionTIMES(5);
-    vector<std::chrono::duration<long long, std::nano>> insertionTIMES(5);
-    vector<std::chrono::duration<long long, std::nano>> bubbleTIMES(5);
-    vector<std::chrono::duration<long long, std::nano>> mergeTIMES(5);
+    vector<double> selectionTIMES(5);
+    vector<double> insertionTIMES(5);
+    vector<double> bubbleTIMES(5);
+    vector<double> mergeTIMES(5);
 
     /*SERÁ TESTADO 5 VEZES CADA VETOR DE TAMANHO DIFERENTE*/
     for( int i = 0 ; i < 5 ; i++ )
@@ -145,43 +145,43 @@ int main()
 
         unsigned seed = time(0);
         srand(seed);
-        for( int i = 0 ; i < n ; i++ )
+        for( int j = 0 ; j < n ; j++ )
         {
-            valores[i] = rand();
+            valores[j] = rand();
         }
         
-        for( int i = 0 ; i < n ; i++ ) valorestest[i] = valores[i];
+        for( int j = 0 ; j < n ; j++ ) valorestest[j] = valores[j];
         auto startselection = steady_clock::now();
         SelectionSort(valorestest, n);
         auto endselection = steady_clock::now();
         auto elapsedselection = endselection - startselection;
-        selectiontime += elapsedselection;
-        selectionTIMES[i] = elapsedselection;
+        selectiontime += duration_cast<nanoseconds>(elapsedselection).count();
+        selectionTIMES[i] = duration_cast<nanoseconds>(elapsedselection).count();
 
-        for( int i = 0 ; i < n ; i++ ) valorestest[i] = valores[i];
+        for( int j = 0 ; j < n ; j++ ) valorestest[j] = valores[j];
         auto startinsertion = steady_clock::now();
         InsertionSort(valorestest, n);
         auto endinsertion = steady_clock::now();
         auto elapsedinsertion = endinsertion - startinsertion;
-        insertiontime += elapsedinsertion;
-        insertionTIMES[i] = elapsedinsertion;
+        insertiontime += duration_cast<nanoseconds>(elapsedinsertion).count();
+        insertionTIMES[i] = duration_cast<nanoseconds>(elapsedinsertion).count();
 
 
-        for( int i = 0 ; i < n ; i++ ) valorestest[i] = valores[i];
+        for( int j = 0 ; j < n ; j++ ) valorestest[j] = valores[j];
         auto startbubble = steady_clock::now();
         BubbleSort(valorestest, n);
         auto endbubble = steady_clock::now();
         auto elapsedbubble = endbubble - startbubble;
-        bubbletime += elapsedbubble;
-        bubbleTIMES[i] = elapsedbubble;
+        bubbletime += duration_cast<nanoseconds>(elapsedbubble).count();
+        bubbleTIMES[i] = duration_cast<nanoseconds>(elapsedbubble).count();
 
-        for( int i = 0 ; i < n ; i++ ) valorestest[i] = valores[i];
+        for( int j = 0 ; j < n ; j++ ) valorestest[j] = valores[j];
         auto startmerge = steady_clock::now();
         MergeSort(valorestest, 0, n - 1);
         auto endmerge = steady_clock::now();
         auto elapsedmerge = endmerge - startmerge;
-        mergetime += elapsedmerge;
-        mergeTIMES[i] = elapsedmerge;
+        mergetime += duration_cast<nanoseconds>(elapsedmerge).count();
+        mergeTIMES[i] = duration_cast<nanoseconds>(elapsedmerge).count();
 
     }
 
@@ -190,25 +190,24 @@ int main()
     bubbletime /= 5;
     mergetime /= 5;
 
-    auto aux = steady_clock::duration::zero();
-
-    auto varSelection = duration_cast<nanoseconds>(aux).count();
-    auto varInsertion = duration_cast<nanoseconds>(aux).count();
-    auto varBubble = duration_cast<nanoseconds>(aux).count();
-    auto varMerge = duration_cast<nanoseconds>(aux).count();
+    /*VARIÁVEIS DO DESVIO PADRÃO*/
+    auto varSelection = 0;
+    auto varInsertion = 0;
+    auto varBubble = 0;
+    auto varMerge = 0;
 
     for( int i = 0 ; i < 5 ; i++ )
     {
-        auto v1 = duration_cast<nanoseconds>(selectionTIMES[i]).count() - duration_cast<nanoseconds>(selectiontime).count();
+        auto v1 = selectionTIMES[i] - selectiontime;
         varSelection += v1 * v1;
 
-        auto v2 = duration_cast<nanoseconds>(insertionTIMES[i]).count() - duration_cast<nanoseconds>(insertiontime).count();
+        auto v2 = insertionTIMES[i] - insertiontime;
         varInsertion += v2 * v2;
 
-        auto v3 = duration_cast<nanoseconds>(bubbleTIMES[i]).count() - duration_cast<nanoseconds>(bubbletime).count();
+        auto v3 = bubbleTIMES[i] - bubbletime;
         varBubble += v3 * v3;
 
-        auto v4 = duration_cast<nanoseconds>(mergeTIMES[i]).count() - duration_cast<nanoseconds>(mergetime).count();
+        auto v4 = mergeTIMES[i] - mergetime;
         varMerge += v4 * v4;
     }
 
@@ -216,11 +215,11 @@ int main()
     auto dpInsertion = sqrt(varInsertion / 5);
     auto dpBubble = sqrt(varBubble / 5);
     auto dpMerge = sqrt(varMerge / 5);
-
-    cout << "SELECTION SORT TIME: " << duration_cast<nanoseconds>(selectiontime).count() / 1000000.0 << "ms -------- DPadrao: " << dpSelection / 1000000.0  << "ms\n";
-    cout << "INSERTION SORT TIME: " << duration_cast<nanoseconds>(insertiontime).count() / 1000000.0 << "ms -------- DPadrao: " << dpInsertion / 1000000.0  << "ms\n";
-    cout << "BUBBLE SORT TIME: " << duration_cast<nanoseconds>(bubbletime).count() / 1000000.0 << "ms -------- DPadrao: " << dpBubble / 1000000.0  << "ms\n";
-    cout << "MERGE SORT TIME: " << duration_cast<nanoseconds>(mergetime).count() / 1000000.0 << "ms -------- DPadrao: " << dpMerge / 1000000.0  << "ms\n";
+    
+    cout << "SELECTION SORT TIME: " << selectiontime / 1000000.0 << "ms -------- DPadrao: " << dpSelection / 1000000.0  << "ms\n";
+    cout << "INSERTION SORT TIME: " << insertiontime / 1000000.0 << "ms -------- DPadrao: " << dpInsertion / 1000000.0  << "ms\n";
+    cout << "BUBBLE SORT TIME: " << bubbletime / 1000000.0 << "ms -------- DPadrao: " << dpBubble / 1000000.0  << "ms\n";
+    cout << "MERGE SORT TIME: " << mergetime / 1000000.0 << "ms -------- DPadrao: " << dpMerge / 1000000.0  << "ms\n";
 
     return 0;    
 }
