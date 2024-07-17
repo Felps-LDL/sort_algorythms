@@ -51,9 +51,6 @@ int main()
     QuickSort(valores, 0, n - 1);
     auto end = steady_clock::now();
 
-    for (int i = 0; i < n; i++) cout << valores[i] << " ";
-    cout << endl;
-
     auto elapsed = end - start;
     cout << duration_cast<nanoseconds>(elapsed).count() / 1000000.0 << "ms\n";
 
